@@ -4,32 +4,15 @@ import 'package:flutter/material.dart';
 
 import '../preferences/preferences.dart';
 
-class SplashPage extends StatefulWidget {
+class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
-
   @override
-  State<SplashPage> createState() => _SplashPageState();
-}
-
-class _SplashPageState extends State<SplashPage> {
-  @override
-  void initState() {
-    if (mounted) {
-      getInit();
-      super.initState();
-    }
-  }
-
-  getInit() async {
+  Widget build(BuildContext context) {
     Timer(
       const Duration(seconds: 3),
       () =>
           Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(

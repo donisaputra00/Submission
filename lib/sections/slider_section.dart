@@ -4,7 +4,7 @@ import 'package:submission/sections/sections.dart';
 
 import '../preferences/preferences.dart';
 
-class SliderSection extends StatefulWidget {
+class SliderSection extends StatelessWidget {
   final CarouselController controller;
   final ValueChanged<int> onChange;
   final int currentIndex;
@@ -25,18 +25,13 @@ class SliderSection extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<SliderSection> createState() => _SliderSectionState();
-}
-
-class _SliderSectionState extends State<SliderSection> {
-  @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CarouselSlider.builder(
-          itemCount: widget.data.length,
-          itemBuilder: (_, i, opt) => _buildItemView(context, widget.data[i]),
+          itemCount: data.length,
+          itemBuilder: (_, i, opt) => _buildItemView(context, data[i]),
           options: CarouselOptions(
             scrollPhysics: const BouncingScrollPhysics(),
             viewportFraction: 1,
@@ -44,26 +39,25 @@ class _SliderSectionState extends State<SliderSection> {
             enableInfiniteScroll: false,
             initialPage: 0,
             onPageChanged: (index, reason) {
-              widget.onChange(index);
+              onChange(index);
             },
-            height: Dimens.height(context) / 1.5,
+            height: Dimens.height(context) / 1.4,
           ),
-          carouselController: widget.controller,
+          carouselController: controller,
         ),
-        (widget.currentIndex == widget.maxLengthIndex)
+        (currentIndex == maxLengthIndex)
             ? CustomButton(
                 text: 'Let’s Combat!',
                 bgColor: AppColors.primaryColor,
-                onTap: widget.onComplete,
+                onTap: onComplete,
                 style: AppTexStyle.button.copyWith(color: AppColors.lightColor),
               )
             : CustomButton(
                 text: 'Skip',
                 bgColor: AppColors.lightColor,
-                onTap: widget.onNext,
+                onTap: onNext,
                 style: AppTexStyle.button,
               ),
-        const SizedBox(height: 30),
         _buildIndicator(context),
       ],
     );
@@ -80,26 +74,30 @@ class _SliderSectionState extends State<SliderSection> {
             ),
           ),
           const SizedBox(height: 20),
-          Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 30,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  data.title,
-                  style: AppTexStyle.title,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 14),
-                Text(
-                  data.desc,
-                  textAlign: TextAlign.center,
-                  style: AppTexStyle.desc,
-                ),
-              ],
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 30,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    data.title,
+                    style: AppTexStyle.title,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    data.desc,
+                    textAlign: TextAlign.center,
+                    style: AppTexStyle.desc,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           )
         ],
@@ -111,14 +109,14 @@ class _SliderSectionState extends State<SliderSection> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: widget.data.map((data) {
-        var isActive = (widget.currentIndex + 1) == data.id;
+      children: data.map((data) {
+        var isActive = (currentIndex + 1) == data.id;
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           width: 8,
           height: 8,
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
             color: isActive
